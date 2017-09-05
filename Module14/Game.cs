@@ -1,16 +1,40 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Module14
 {
+    
+    
+
     class Game
     {
-        public Dictionary<Player, List<Card>> startGame(int players)
+        public static IComparer sortYearAscending()
         {
-            Dictionary<Player, List<Card>> team = new Dictionary<Player, List<Card>>();
+            return (IComparer)new Player();
+        }
+        private class GameComparer : IComparer
+        {
+            int IComparer.Compare(object a, object b)
+            {
+                Player c1 = (Player)a;
+                Player c2 = (Player)b;
+                return String.Compare(c2.name, c1.name);
+            }
+            
+        }
+        public SortedDictionary<Player, List<Card>> startGame(int players)
+        {
+            // Dictionary<Player, List<Card>> team = new Dictionary<Player, List<Card>>();
+            CultureInfo myCul = new CultureInfo("tr-TR");
+            SortedDictionary<Player, List<Card>> team = new SortedDictionary<Player, List<Card>>(new GameComparer());
+            List<Player> qwe = new List<Player>();
+            List<List<Player>> qwerty = new List<List<Player>>();
+            
             Card card = new Card();
             List<Card> cards = card.giveCards();
             cards = cards.OrderBy(a => Guid.NewGuid()).ToList();
@@ -23,17 +47,18 @@ namespace Module14
                 List<Card> playerCards = new List<Card>();
                 for (int j = 0; j < 36 / players; j++)
                     playerCards.Add(cards[count++]);
-
+                
                 team.Add(player, playerCards);
             }
             return team;
         }
-        public void playGame(Dictionary<Player, List<Card>> team)
+        public void playGame(SortedDictionary<Player, List<Card>> team)
         {
             bool endgame = true;
             int round = 0;
             int[] findMaxCardtemp = new int[team.Count];
             List<Card> findMaxCard = new List<Card>();
+            
             while (endgame)
             {
                 foreach (var item in team)

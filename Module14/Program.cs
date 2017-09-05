@@ -13,7 +13,7 @@ namespace Module14
         {
             Game game = new Game();
             Console.WriteLine("Введите количество игроков");
-            Dictionary<Player, List<Card>> team = game.startGame(Convert.ToInt32(Console.ReadLine()));
+            SortedDictionary<Player, List<Card>> team = game.startGame(Convert.ToInt32(Console.ReadLine()));
             game.playGame(team);
 
         }
